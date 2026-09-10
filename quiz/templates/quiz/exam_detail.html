@@ -3,28 +3,38 @@
 {% block title %}{{ exam.title }}{% endblock %}
 
 {% block content %}
-<h1>{{ exam.title }}</h1>
-<p>{{ exam.description }}</p>
+<h1 class="mb-3">{{ exam.title }}</h1>
+<p class="lead text-muted mb-4">{{ exam.description }}</p>
 
-<h2>Questions</h2>
-<ul>
-    {% for question in questions %}
-        <li>
-            <strong>{{ question.statement }}</strong>
-            <ul>
+<h2 class="mb-3">Questions</h2>
+
+{% for question in questions %}
+    <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">{{ forloop.counter }}. {{ question.statement }}</h5>
+            <p class="text-muted">Score: {{ question.score }}</p>
+            <ul class="list-group list-group-flush">
                 {% for choice in question.choices.all %}
-                    <li>
-                        {% if choice.is_correct %}[✓] {% else %}[ ] {% endif %}
+                    <li class="list-group-item">
+                        {% if choice.is_correct %}
+                            <span class="badge bg-success me-2">✓ Correct</span>
+                        {% else %}
+                            <span class="badge bg-secondary me-2">○</span>
+                        {% endif %}
                         {{ choice.text }}
                     </li>
+                {% empty %}
+                    <li class="list-group-item text-muted">No choices yet.</li>
                 {% endfor %}
             </ul>
-        </li>
-    {% empty %}
-        <li>No questions yet.</li>
-    {% endfor %}
-</ul>
+        </div>
+    </div>
+{% empty %}
+    <div class="alert alert-info">No questions yet for this exam.</div>
+{% endfor %}
 
-<a href="{% url 'quiz:question_add' exam.pk %}" class="btn">Add Question</a>
-<a href="{% url 'quiz:exam_list' %}" class="btn">Back to Exams</a>
+<div class="mt-4">
+    <a href="{% url 'quiz:question_add' exam.pk %}" class="btn btn-success me-2">Add Question</a>
+    <a href="{% url 'quiz:exam_list' %}" class="btn btn-outline-primary">Back to Exams</a>
+</div>
 {% endblock %}

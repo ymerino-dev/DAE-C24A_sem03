@@ -1,29 +1,50 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.views import View
+from django.urls import reverse_lazy
 from .models import Exam, Question, Choice
 from .forms import ExamForm, QuestionForm, ChoiceFormSet
 
 
-def exam_list(request):
-    exams = Exam.objects.all()
-    return render(request, "quiz/exam_list.html", {"exams": exams})
+class ExamListView(View):
+    def get(self, request):
+        exams = Exam.objects.all()
+        return render(request, "quiz/exam_list.html", {"exams": exams})
 
 
-def exam_detail(request, pk):
-    exam = get_object_or_404(Exam, pk=pk)
-    questions = exam.questions.all()
-    return render(
-        request,
-        "quiz/exam_detail.html",
-        {"exam": exam, "questions": questions},
-    )
+class ExamDetailView(View):
+    def get(self, request, pk):
+        exam = get_object_or_404(Exam, pk=pk)
+        questions = exam.questions.all()
+        return render(
+            request,
+            "quiz/exam_detail.html",
+            {"exam": exam, "questions": questions},
+        )
+
+
+class ExamCreateView(View):
+    form_class = ExamForm
+    template_name = "quiz/exam_form.html"
+    success_url = reverse_lazy("quiz:exam_list")
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Exam created successfully.")
+            return redirect(self.success_url)
+        return render(request, self.template_name, {"form": form})
 
 
 def question_add(request, exam_pk):
     exam = get_object_or_404(Exam, pk=exam_pk)
     if request.method == "POST":
         form = QuestionForm(request.POST)
-        formset = ChoiceFormSet(request.POST, instance=exam)
         if form.is_valid():
             question = form.save(commit=False)
             question.exam = exam
@@ -47,13 +68,13 @@ def question_add(request, exam_pk):
                         request,
                         "Question added successfully.",
                     )
-                    return redirect("exam_detail", pk=exam.pk)
+                    return redirect("quiz:exam_detail", pk=exam.pk)
             else:
                 question.delete()
         messages.error(request, "Please correct the errors below.")
     else:
         form = QuestionForm()
-        formset = ChoiceFormSet(instance=exam)
+        formset = ChoiceFormSet(instance=Question(exam=exam))
     return render(
         request,
         "quiz/question_add.html",
