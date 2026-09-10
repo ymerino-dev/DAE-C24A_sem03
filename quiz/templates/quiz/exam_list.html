@@ -3,22 +3,22 @@
 {% block title %}Exams{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Exams</h1>
+<h1>Exams</h1>
 
 <div class="row">
     {% for exam in exams %}
-        <div class="col-md-4 mb-3">
-            <div class="card mb-3 shadow-sm">
+        <div class="col-md-4">
+            <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{{ exam.title }}</h5>
-                    <p class="card-text text-muted">{{ exam.description|truncatewords:15 }}</p>
+                    <p class="card-text">{{ exam.description|truncatewords:15 }}</p>
                     <a href="{% url 'quiz:exam_detail' exam.pk %}" class="btn btn-primary">View Questions</a>
                 </div>
             </div>
         </div>
     {% empty %}
         <div class="col-12">
-            <div class="alert alert-info">No exams available yet.</div>
+            <p>No exams available yet.</p>
             <a href="{% url 'quiz:exam_create' %}" class="btn btn-primary">New Exam</a>
         </div>
     {% endfor %}

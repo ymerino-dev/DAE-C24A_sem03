@@ -3,15 +3,15 @@
 {% block title %}Add Question - {{ exam.title }}{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Add Question to "{{ exam.title }}"</h1>
+<h1>Add Question to "{{ exam.title }}"</h1>
 
-<div class="card shadow-sm mb-4" style="max-width: 800px;">
+<div class="card">
     <div class="card-body">
         <form method="post">
             {% csrf_token %}
-            <h5 class="card-title mb-3">Question</h5>
+            <h5>Question</h5>
             <div class="mb-3">
-                <label for="{{ form.statement.id_for_label }}" class="form-label">{{ form.statement.label }}</label>
+                <label class="form-label">{{ form.statement.label }}</label>
                 {{ form.statement }}
                 {% if form.statement.errors %}
                     <div class="text-danger">
@@ -22,16 +22,16 @@
                 {% endif %}
             </div>
 
-            <h5 class="card-title mb-3 mt-4">Choices</h5>
+            <h5 class="mt-4">Choices</h5>
             {{ formset.management_form }}
             <div class="row mb-3">
                 {% for form in formset %}
                     <div class="col-md-5 mb-2">
                         <div class="input-group">
                             {{ form.text }}
-                            <div class="form-check form-switch ms-2">
+                            <div class="form-check-switch">
                                 {{ form.is_correct }}
-                                <label class="form-check-label" for="{{ form.is_correct.id_for_label }}">Correct</label>
+                                <label>Correct</label>
                             </div>
                         </div>
                         {{ form.id }}
