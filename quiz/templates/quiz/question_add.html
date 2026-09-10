@@ -1,0 +1,28 @@
+{% extends "quiz/base.html" %}
+
+{% block title %}Add Question - {{ exam.title }}{% endblock %}
+
+{% block content %}
+<h1>Add Question to "{{ exam.title }}"</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <h2>Question</h2>
+    {{ form.as_p }}
+
+    <h2>Choices</h2>
+    {{ formset.management_form }}
+    <table>
+        {% for form in formset %}
+            <tr>
+                <td>{{ form.text.label_tag }}</td>
+                <td>{{ form.text }}</td>
+                <td>{{ form.is_correct }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <button type="submit" class="btn">Save Question</button>
+    <a href="{% url 'quiz:exam_detail' exam.pk %}" class="btn">Cancel</a>
+</form>
+{% endblock %}
