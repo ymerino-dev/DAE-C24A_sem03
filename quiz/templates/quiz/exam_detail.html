@@ -17,9 +17,9 @@
                 {% for choice in question.choices.all %}
                     <li class="list-group-item">
                         {% if choice.is_correct %}
-                            <span class="badge bg-success me-2">✓ Correct</span>
+                            <span class="badge bg-success me-2">Correct</span>
                         {% else %}
-                            <span class="badge bg-secondary me-2">○</span>
+                            <span class="badge bg-secondary me-2">—</span>
                         {% endif %}
                         {{ choice.text }}
                     </li>

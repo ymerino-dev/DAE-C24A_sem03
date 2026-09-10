@@ -8,7 +8,7 @@
 <div class="row">
     {% for exam in exams %}
         <div class="col-md-4 mb-3">
-            <div class="card shadow-sm">
+            <div class="card mb-3 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">{{ exam.title }}</h5>
                     <p class="card-text text-muted">{{ exam.description|truncatewords:15 }}</p>
@@ -19,6 +19,7 @@
     {% empty %}
         <div class="col-12">
             <div class="alert alert-info">No exams available yet.</div>
+            <a href="{% url 'quiz:exam_create' %}" class="btn btn-primary">New Exam</a>
         </div>
     {% endfor %}
 </div>

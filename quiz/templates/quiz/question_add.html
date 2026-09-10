@@ -29,8 +29,8 @@
                     <div class="col-md-5 mb-2">
                         <div class="input-group">
                             {{ form.text }}
-                            <div class="form-check form-check-switch input-group-text ms-2">
-                                <input class="form-check-input" type="checkbox" name="{{ form.is_correct.name }}" id="{{ form.is_correct.id_for_label }}" {% if form.is_correct.value %}checked{% endif %}>
+                            <div class="form-check form-switch ms-2">
+                                {{ form.is_correct }}
                                 <label class="form-check-label" for="{{ form.is_correct.id_for_label }}">Correct</label>
                             </div>
                         </div>
